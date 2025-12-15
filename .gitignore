@@ -1,3 +1,5 @@
 **/apify_api.ipynb
 **/serp_api.ipynb
 **/salenium.ipynb
+.env
+Workflow_pdf/
