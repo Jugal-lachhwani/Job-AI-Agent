@@ -22,20 +22,21 @@ class Job(BaseModel):
     applicationsCount: str
     description:str
 
-class JobInfo(BaseModel):
-    title : str
-    location : str
-    date_posted : str
-    company_name : List[str]
-    companyId : List[str]
-    skipJobId : List[str]
-    remote : List[str]
-    experienceLevel : List[str]
-    contractType : List[str]
-    limit : int
+class Job_Info_state(BaseModel):
+    title : str  | None
+    location : str | None
+    datePosted : str | None
+    companyName : List[str] | None
+    companyId : List[str] | None
+    skipJobId : List[str] | None
+    remote : List[str] | None
+    experienceLevel : List[str] | None
+    contractType : List[str] | None
+    limit : int | None
 
 class GraphState(TypedDict):
-    job_info : JobInfo
+    user_input : str
+    job_info : Job_Info_state
     resume_text : str
     jobs : List[Job]
 
