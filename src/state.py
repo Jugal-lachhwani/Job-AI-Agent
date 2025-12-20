@@ -1,5 +1,6 @@
 from pydantic import BaseModel
-from typing import List,TypedDict
+from typing import List,TypedDict,Set,Annotated
+import operator
 
 class Job(BaseModel):
     id : str
@@ -20,7 +21,7 @@ class Job(BaseModel):
     postedTimeAgo:str  
     postedDate: str
     applicationsCount: str
-    description:str
+    description: str
 
 class Job_Info_state(BaseModel):
     title : str  | None
@@ -34,11 +35,30 @@ class Job_Info_state(BaseModel):
     contractType : List[str] | None
     limit : int | None
 
+class Job_Output(TypedDict):
+      job_info = str
+      job_skills = List[str]
+      similarity = int
+      id = int
+      feedback = int
+
+class Resume_Fields(BaseModel):
+    skills : List[str]
+    Profile : str
+    Projects : List[str]
+    Certifications : List[str]
+    Experience : List[str]   
+    Education : List[str]
+
 class GraphState(TypedDict):
     user_input : str
     job_info : Job_Info_state
     resume_text : str
     jobs : List[Job]
+    visited_ids = Set[int]
+    job_outputs = Annotated[List[Job_Output], operator.add]
+    resume_fields = Resume_Fields
+    
 
 
 {

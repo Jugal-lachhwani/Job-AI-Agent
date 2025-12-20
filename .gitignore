@@ -3,3 +3,6 @@
 **/salenium.ipynb
 .env
 Workflow_pdf/
+notebooks/
+**.pdf
+**.txt

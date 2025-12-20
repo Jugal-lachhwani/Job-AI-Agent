@@ -63,4 +63,22 @@ class JobInfo(BaseModel):
 
         return [mapping[ctype] for ctype in self.experience_level]  
     
+class Resume(BaseModel):
+    skills : List[str] = Field(default=['No skills'], description="The main programing and technikal skills focus more on the domain specific skills rather than soft skills")
+    Profile : str = Field(default='No profile', description="The brief info about the user found in the resume text")
+    Projects : List[str] = Field(defaul=['No Projects'], description="The Projects that are built by the user found in the resume")
+    Certifications : List[str] = Field(default=['No Certifications'], description='THe certifications of the user in the resume')
+    Experience : List[str] = Field(default=['No Experience'], description="The Experience of the user mentioned in the resume")
+    Education : List[str] = Field(default='[No Education]',description='The education oof the yser found in the resume')
+
+class similar_and_feadback(BaseModel):
+    similarity : int = Field(...,description='Judge how good the Job is matching the resume text The similarity between 0 to 100 to tell him will this job suits him by his resume ') 
+    feadback   : str = Field(default = 'No feadback', description='Tell him what is missing from the user resume to get this job, kind of the feadback, what sector is lacking and what is lacking')
+
+class Job_Summary(BaseModel):
+    skills : List[str] = Field(...,description= 'Extract the skills that are mentioned in the Job description')
+    job_info : str = Field(...,description = "Summary of the job in 3 lines")
     
+class Job_Summary(BaseModel):
+    skills : List[str] = Field(...,description= 'Extract the skills that are mentioned in the Job description')
+    job_info : str = Field(...,description = "Summary of the job in 3 lines")
