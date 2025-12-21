@@ -76,9 +76,5 @@ class similar_and_feadback(BaseModel):
     feadback   : str = Field(default = 'No feadback', description='Tell him what is missing from the user resume to get this job, kind of the feadback, what sector is lacking and what is lacking')
 
 class Job_Summary(BaseModel):
-    skills : List[str] = Field(...,description= 'Extract the skills that are mentioned in the Job description')
-    job_info : str = Field(...,description = "Summary of the job in 3 lines")
-    
-class Job_Summary(BaseModel):
-    skills : List[str] = Field(...,description= 'Extract the skills that are mentioned in the Job description')
+    job_skills : List[str] = Field(...,description= 'Extract the skills that are mentioned in the Job description')
     job_info : str = Field(...,description = "Summary of the job in 3 lines")

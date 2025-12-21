@@ -35,9 +35,12 @@ class Job_Info_state(BaseModel):
     contractType : List[str] | None
     limit : int | None
 
-class Job_Output(TypedDict):
+class Job_Summary(TypedDict):
       job_info = str
       job_skills = List[str]
+      id = int
+
+class Job_Feadback():
       similarity = int
       id = int
       feedback = int
@@ -56,8 +59,10 @@ class GraphState(TypedDict):
     resume_text : str
     jobs : List[Job]
     visited_ids = Set[int]
-    job_outputs = Annotated[List[Job_Output], operator.add]
+    job_summaries = Annotated[List[Job_Summary], operator.add]
     resume_fields = Resume_Fields
+    job_feedbacks = Annotated[List[Job_Summary], operator.add]
+    visited_ids_feedback = Set[int]
     
 
 
