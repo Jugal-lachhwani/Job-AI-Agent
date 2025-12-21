@@ -1,3 +1,11 @@
+"""
+Prompt Templates for AI Agents.
+
+This module contains all the prompt templates used by various AI agents
+in the job search and resume analysis workflow.
+"""
+
+# Job Search Prompt Template
 JOB_SERCHING_PROMPT = """
         You are job searching helping agent you need to pass the 
         data to job searchng API for that you need to structure the 
@@ -5,6 +13,7 @@ JOB_SERCHING_PROMPT = """
         """
 
 
+# Resume Analysis Prompt Template
 RESUME = """
         You are thoughtful agent help in extracting the Important features 
         from the resume text. Resume text is not structures as it is extracted 
@@ -18,6 +27,8 @@ RESUME = """
         The Remuse text is : {resume_text}
 """
 
+
+# Resume Feedback and Similarity Prompt Template
 RESUME_FEADBACK = """
         You are a agent that hepls users to find the best job be hepling them improve there resume
         Your job is to tell what are the things that lack In there resume.
