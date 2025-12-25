@@ -101,7 +101,7 @@ class Job_Summary(TypedDict):
     id: int
 
 
-class Job_Feadback(BaseModel):
+class Job_Feedback(BaseModel):
     """
     Feedback and similarity analysis between resume and job posting.
     
@@ -121,14 +121,14 @@ class Resume_Fields(BaseModel):
     
     Attributes:
         skills (List[str]): Technical and domain-specific skills.
-        Profile (str): Professional summary/profile section.
+        profile (str): Professional summary/profile section.
         Projects (List[str]): List of projects mentioned in resume.
         Certifications (List[str]): Professional certifications.
         Experience (List[str]): Work experience entries.
         Education (List[str]): Educational qualifications.
     """
     skills: List[str]
-    Profile: str
+    profile: str
     Projects : List[str]
     Certifications : List[str]
     Experience : List[str]   
@@ -152,7 +152,7 @@ class GraphState(TypedDict):
         job_summaries (Annotated[List[Job_Summary], operator.add]): 
             Accumulated list of job summaries (nodes can append to it).
         resume_fields (Resume_Fields): Structured resume information.
-        job_feedbacks (Annotated[List[Job_Feadback], operator.add]): 
+        job_feedbacks (Annotated[List[Job_Feedback], operator.add]): 
             Accumulated feedback and similarity scores for jobs.
         visited_ids_feedback (Set[int]): Set of job IDs already processed for feedback.
     """
@@ -163,7 +163,7 @@ class GraphState(TypedDict):
     visited_ids: Set[int]
     job_summaries: Annotated[List[Job_Summary], operator.add]
     resume_fields: Resume_Fields
-    job_feedbacks: Annotated[List[Job_Feadback], operator.add]
+    job_feedbacks: Annotated[List[Job_Feedback], operator.add]
     visited_ids_feedback: Set[int]
     
 

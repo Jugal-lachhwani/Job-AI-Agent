@@ -52,7 +52,7 @@ class Workflow():
         workflow.add_node("resume_text_extractor", nodes.resume_text_extractor)
         workflow.add_node("extract_fields_from_resume", nodes.extract_fields_from_resume)
         workflow.add_node("extract_fields_from_job_desc", nodes.extract_fields_from_job_desc)
-        workflow.add_node("Feadback_and_similarity", nodes.Feadback_and_similarity)
+        workflow.add_node("Feedback_and_similarity", nodes.Feedback_and_similarity)
         
         logger.debug("Configuring workflow edges")
         # Branch 1: Job Description Path
@@ -64,11 +64,11 @@ class Workflow():
         workflow.add_edge("resume_text_extractor", "extract_fields_from_resume")
         
         # Both branches converge to Feedback node (LangGraph waits for both)
-        workflow.add_edge("extract_fields_from_job_desc", "Feadback_and_similarity")
-        workflow.add_edge("extract_fields_from_resume", "Feadback_and_similarity")
+        workflow.add_edge("extract_fields_from_job_desc", "Feedback_and_similarity")
+        workflow.add_edge("extract_fields_from_resume", "Feedback_and_similarity")
         
         # End workflow
-        workflow.add_edge("Feadback_and_similarity", END)
+        workflow.add_edge("Feedback_and_similarity", END)
         
         logger.info("Compiling workflow graph")
         self.app = workflow.compile()

@@ -29,7 +29,7 @@ RESUME = """
 
 
 # Resume Feedback and Similarity Prompt Template
-RESUME_FEADBACK = """
+RESUME_FEEDBACK = """
         You are a agent that hepls users to find the best job be hepling them improve there resume
         Your job is to tell what are the things that lack In there resume.
         What are those keywords, skills or projects what will help him to improve the resume,

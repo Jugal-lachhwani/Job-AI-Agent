@@ -170,7 +170,7 @@ class Resume(BaseModel):
     
     Attributes:
         skills: Technical and domain-specific skills (not soft skills).
-        Profile: Brief professional summary about the candidate.
+        profile: Brief professional summary about the candidate.
         Projects: List of projects mentioned in the resume.
         Certifications: Professional certifications held.
         Experience: Work experience details.
@@ -180,7 +180,7 @@ class Resume(BaseModel):
         default=['No skills'],
         description="The main programing and technikal skills focus more on the domain specific skills rather than soft skills"
     )
-    Profile: str = Field(
+    profile: str = Field(
         default='No profile',
         description="The brief info about the user found in the resume text"
     )
@@ -202,21 +202,21 @@ class Resume(BaseModel):
     )
 
 
-class similar_and_feadback(BaseModel):
+class SimilarAndFeedback(BaseModel):
     """
     Similarity score and feedback for resume-job matching.
     
     Attributes:
         similarity: Match score from 0-100 indicating job suitability.
-        feadback: Detailed feedback on what's missing or needs improvement.
+        feedback: Detailed feedback on what's missing or needs improvement.
     """
     similarity: int = Field(
         ...,
         description='Judge how good the Job is matching the resume text The similarity between 0 to 100 to tell him will this job suits him by his resume'
     )
-    feadback: str = Field(
-        default='No feadback',
-        description='Tell him what is missing from the user resume to get this job, kind of the feadback, what sector is lacking and what is lacking'
+    feedback: str = Field(
+        default='No feedback',
+        description='Tell him what is missing from the user resume to get this job, kind of the feedback, what sector is lacking and what is lacking'
     )
 
 

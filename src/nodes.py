@@ -6,9 +6,9 @@ stages of the job search and resume analysis workflow.
 """
 
 import logging
-from agents import Agents
-from state import *
-from tools.scraping_tools import *
+from src.agents import Agents
+from src.state import *
+from src.tools.scraping_tools import *
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -110,7 +110,7 @@ class Nodes:
         try:
             from pypdf import PdfReader
 
-            resume_path = "E:\Genai_Projects\\Job_search_Agent\\Resume.pdf"
+            resume_path = r"E:\Genai_Projects\Job_search_Agent\Resume.pdf"
             logger.debug(f"Reading resume from: {resume_path}")
             
             reader = PdfReader(resume_path)
@@ -154,7 +154,7 @@ class Nodes:
             logger.debug("Invoking resume agent")
             res = self.agents.resume_agent.invoke({'resume_text': resume_text})
             logger.info("Successfully extracted resume fields")
-            logger.debug(f"Extracted fields: skills={len(res.skills)}, profile length={len(res.Profile)}")
+            logger.debug(f"Extracted fields: skills={len(res.skills)}, profile length={len(res.profile)}")
             
             return {'resume_fields': res}
             
@@ -210,7 +210,7 @@ class Nodes:
             logger.error(f"Error extracting job description fields: {str(e)}", exc_info=True)
             raise
 
-    def Feadback_and_similarity(self, state: GraphState) -> GraphState:
+    def Feedback_and_similarity(self, state: GraphState) -> GraphState:
         """
         Generate feedback and calculate similarity scores between resume and jobs.
         
@@ -253,9 +253,9 @@ class Nodes:
                         'job_info': job_info
                     })
                     
-                    job_feedback_model = Job_Feadback(
+                    job_feedback_model = Job_Feedback(
                         similarity=job_feedback.similarity,
-                        feedback=job_feedback.feadback,
+                        feedback=job_feedback.feedback,
                         job_id=job.id
                     )
                     job_feedback_model_list.append(job_feedback_model)

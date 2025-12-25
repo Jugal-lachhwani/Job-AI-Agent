@@ -9,8 +9,8 @@ import logging
 from langchain_core.prompts import PromptTemplate
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_huggingface import HuggingFaceEmbeddings
-from prompts import *
-from structure_outputs import *
+from src.prompts import *
+from src.structure_outputs import *
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -100,7 +100,7 @@ class Agents:
         # Resume Feedback Agent
         logger.debug("Setting up resume feedback agent")
         resume_feedback_template = PromptTemplate(
-            template=RESUME_FEADBACK,
+            template=RESUME_FEEDBACK,
             input_variables=['resume_skills', 'resume_profile', 'job_skills', 'job_info'],
             input_types={
                 'resume_skills': List[str],
@@ -112,7 +112,7 @@ class Agents:
         
         self.resume_feedback_agent = (
             resume_feedback_template |
-            llm.with_structured_output(similar_and_feadback)
+            llm.with_structured_output(SimilarAndFeedback)
         )
         logger.debug("Resume feedback agent initialized")
         
