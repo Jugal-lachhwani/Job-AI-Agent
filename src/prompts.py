@@ -35,6 +35,8 @@ RESUME_FEEDBACK = """
         What are those keywords, skills or projects what will help him to improve the resume,
         Along with that give the similarity score between 0 to 100 how well the jon suits the user
         
-        Resemu text : {resume_text}
-        Job description : {job_description}
+        Resemue skills : {resume_skills}
+        Job Info : {job_info}
+        Job skills : {job_skills}
+        resume Profile : {resume_profile}
 """

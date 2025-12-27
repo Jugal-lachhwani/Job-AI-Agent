@@ -236,3 +236,4 @@ class Job_Summary(BaseModel):
         ...,
         description="Summary of the job in 3 lines"
     )
+    

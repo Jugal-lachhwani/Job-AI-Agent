@@ -8,14 +8,18 @@ using the Apify platform.
 import logging
 import os
 from apify_client import ApifyClient
+# from src.state import Job
+from pydantic import BaseModel
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Configure logging
 logger = logging.getLogger(__name__)
 
 # Load environment variables
-APIFY_TOKEN = os.getenv('APIFY_TOKEN') 
-APIFY_ACTOR_NAME = os.getenv('APIFY_ACTOR_NAME')
-
+APIFY_TOKEN = os.getenv("APIFY_TOKEN" )
+APIFY_ACTOR_NAME = os.getenv('APIFY_ACTOR_NAME' )
 
 def linkedin_scrapper(actor_input: dict):
     """
@@ -80,8 +84,117 @@ def linkedin_scrapper(actor_input: dict):
         dataset = apify_client.dataset(actor_run["defaultDatasetId"])
         logger.info(f"Dataset ID: {actor_run['defaultDatasetId']}")
         
-        return dataset
+        return actor_run["defaultDatasetId"]
+    
         
     except Exception as e:
         logger.error(f"Failed to scrape LinkedIn jobs: {str(e)}", exc_info=True)
         raise
+    
+"""
+Trial script to test job scraping node in isolation.
+"""
+
+import logging
+import os
+import time
+import requests
+from dotenv import load_dotenv
+
+# -------------------------------------------------------------------
+# Environment & Logging
+# -------------------------------------------------------------------
+
+load_dotenv()
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+)
+logger = logging.getLogger(__name__)
+
+# -------------------------------------------------------------------
+# Helper: Poll dataset until items exist or timeout
+# -------------------------------------------------------------------
+
+def fetch_dataset_items_with_wait(
+    dataset_id: str,
+    token: str,
+    wait_seconds: int = 20,
+    poll_interval: int = 2
+):
+    """
+    Poll Apify dataset until items are available or timeout is reached.
+    """
+    url = f"https://api.apify.com/v2/datasets/{dataset_id}/items"
+    start_time = time.time()
+
+    while True:
+        response = requests.get(
+            url,
+            params={
+                "token": token,
+                "format": "json"
+            }
+        )
+        response.raise_for_status()
+        data = response.json()
+
+        if data:
+            return data
+
+        elapsed = time.time() - start_time
+        if elapsed >= wait_seconds:
+            return []
+
+        logger.info("Dataset empty, waiting...")
+        time.sleep(poll_interval)
+
+# -------------------------------------------------------------------
+# Main Test Function
+# -------------------------------------------------------------------
+
+def job_scraping(job_info_dict):
+    try:
+        dataset_id = linkedin_scrapper(job_info_dict)
+        logger.info(f"Dataset ID: {dataset_id}")
+        logger.info(f"Apify Token: {APIFY_TOKEN}")
+
+        # Step 5: Wait & fetch dataset items
+        logger.info("\n--- Step 5: Fetching Dataset Items (wait max 10s) ---")
+        jobs_data = fetch_dataset_items_with_wait(
+            dataset_id=dataset_id,
+            token=APIFY_TOKEN,
+            wait_seconds=20,
+            poll_interval=2
+        )
+
+        if not jobs_data:
+            logger.warning("⚠️ No jobs fetched after 10 seconds")
+        else:
+            logger.info(f"✅ Fetched {len(jobs_data)} jobs")
+
+        return jobs_data
+
+    except Exception as e:
+        logger.error(f"❌ ERROR: {str(e)}", exc_info=True)
+        raise
+
+# -------------------------------------------------------------------
+# Entry Point
+# -------------------------------------------------------------------
+
+if __name__ == "__main__":
+    try:
+        l = []
+        jobs = job_scraping({"title":"Software Engineer","location":"India","limit":1,"datePosted":"r604800","experienceLevel":["3"]})
+        for job in jobs:
+            l.append(Job(**job))
+        print("\n" + "=" * 80)
+        print(f"✅ TEST COMPLETED: {len(jobs)} jobs scraped successfully")
+        print("=" * 80)
+        print("Pydantic Object: ", l)
+    except Exception as e:
+        print("\n" + "=" * 80)
+        print(f"❌ TEST FAILED: {str(e)}")
+        print("=" * 80)

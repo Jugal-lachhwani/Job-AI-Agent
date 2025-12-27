@@ -13,7 +13,6 @@ from src.tools.scraping_tools import *
 # Configure logging
 logger = logging.getLogger(__name__)
 
-
 class Nodes:
     """
     Collection of workflow node functions for the Job Search Agent.
@@ -74,12 +73,13 @@ class Nodes:
             
             # Scrape jobs from LinkedIn
             logger.info("Initiating LinkedIn job scraping")
-            scrap_job = linkedin_scrapper(job_info_dict)
+            jobs_data = job_scraping(job_info_dict)
             
             # Convert scraped items to Job objects
             l = []
-            for item in scrap_job.iterate_items():
-                l.append(Job(**item))
+            for job in jobs_data:
+                l.append(Job(**job))
+            
             
             logger.info(f"Successfully scraped {len(l)} jobs")
             return {'jobs': l}
@@ -256,7 +256,7 @@ class Nodes:
                     job_feedback_model = Job_Feedback(
                         similarity=job_feedback.similarity,
                         feedback=job_feedback.feedback,
-                        job_id=job.id
+                        id=job.id
                     )
                     job_feedback_model_list.append(job_feedback_model)
                     logger.info(f"Job {job.id} similarity score: {job_feedback.similarity}")

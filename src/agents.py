@@ -7,10 +7,14 @@ including job search parsing, resume analysis, and feedback generation.
 
 import logging
 from langchain_core.prompts import PromptTemplate
-from langchain_google_genai import ChatGoogleGenerativeAI
+# from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_nvidia_ai_endpoints import ChatNVIDIA
 from langchain_huggingface import HuggingFaceEmbeddings
 from src.prompts import *
 from src.structure_outputs import *
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -47,9 +51,11 @@ class Agents:
         logger.info("Initializing AI agents")
         
         # Initialize LLM
-        logger.debug("Loading Gemini 2.5 Flash Lite model")
-        llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash-lite")
-        
+        logger.debug("Loading meta/llama-3.1-70b-instruct model")
+        # llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash-lite")
+        llm = ChatNVIDIA(
+    model="meta/llama-3.1-70b-instruct",  # choose any NVIDIA-supported model
+)
         # Initialize embeddings
         logger.debug("Loading HuggingFace embeddings model")
         embeddings = HuggingFaceEmbeddings(

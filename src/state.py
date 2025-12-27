@@ -87,7 +87,7 @@ class Job_Info_state(BaseModel):
     limit: int | None
 
 
-class Job_Summary(TypedDict):
+class Job_Summary(BaseModel):
     """
     Summarized and extracted information from a job description.
     
@@ -111,7 +111,7 @@ class Job_Feedback(BaseModel):
         feedback (str): Detailed feedback on what's missing or needs improvement.
     """
     similarity: int
-    job_id: int
+    id: int
     feedback: str
 
 
