@@ -34,6 +34,8 @@ RESUME_FEEDBACK = """
         Your job is to tell what are the things that lack In there resume.
         What are those keywords, skills or projects what will help him to improve the resume,
         Along with that give the similarity score between 0 to 100 how well the jon suits the user
+        If the experience is None then dont mention the experience in feedback and focus on projects 
+        Add what more he can improve in skills do be a good candidate for the job, In which feilds of the job he should learn
         
         Resemue skills : {resume_skills}
         Job Info : {job_info}

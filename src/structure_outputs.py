@@ -225,9 +225,11 @@ class Job_Summary(BaseModel):
     Extracted summary and key information from job description.
     
     Attributes:
+        id: Unique job identifier.
         job_skills: List of required skills mentioned in the job.
         job_info: 3-line summary of the job role.
     """
+    id: str
     job_skills: List[str] = Field(
         ...,
         description='Extract the skills that are mentioned in the Job description'

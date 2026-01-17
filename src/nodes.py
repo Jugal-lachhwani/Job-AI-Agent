@@ -110,7 +110,8 @@ class Nodes:
         try:
             from pypdf import PdfReader
 
-            resume_path = r"E:\Genai_Projects\Job_search_Agent\Resume.pdf"
+            
+            resume_path = state.get('resume_path',r"E:\Genai_Projects\Job_search_Agent\Resume.pdf")
             logger.debug(f"Reading resume from: {resume_path}")
             
             reader = PdfReader(resume_path)

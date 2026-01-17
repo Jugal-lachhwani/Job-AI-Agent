@@ -8,16 +8,20 @@ using the Apify platform.
 import logging
 import os
 from apify_client import ApifyClient
-# from src.state import Job
-from pydantic import BaseModel
+import time
+import requests
 from dotenv import load_dotenv
 
 load_dotenv()
 
-# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+)
+
+
 logger = logging.getLogger(__name__)
 
-# Load environment variables
 APIFY_TOKEN = os.getenv("APIFY_TOKEN" )
 APIFY_ACTOR_NAME = os.getenv('APIFY_ACTOR_NAME' )
 
@@ -56,6 +60,7 @@ def linkedin_scrapper(actor_input: dict):
         >>> for job in dataset.iterate_items():
         ...     print(job['title'])
     """
+    
     # Validate environment variables
     if not APIFY_TOKEN:
         logger.error("APIFY_TOKEN environment variable not set")
@@ -90,32 +95,8 @@ def linkedin_scrapper(actor_input: dict):
     except Exception as e:
         logger.error(f"Failed to scrape LinkedIn jobs: {str(e)}", exc_info=True)
         raise
-    
-"""
-Trial script to test job scraping node in isolation.
-"""
 
-import logging
-import os
-import time
-import requests
-from dotenv import load_dotenv
-
-# -------------------------------------------------------------------
-# Environment & Logging
-# -------------------------------------------------------------------
-
-load_dotenv()
-
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-)
-logger = logging.getLogger(__name__)
-
-# -------------------------------------------------------------------
 # Helper: Poll dataset until items exist or timeout
-# -------------------------------------------------------------------
 
 def fetch_dataset_items_with_wait(
     dataset_id: str,
@@ -150,9 +131,7 @@ def fetch_dataset_items_with_wait(
         logger.info("Dataset empty, waiting...")
         time.sleep(poll_interval)
 
-# -------------------------------------------------------------------
-# Main Test Function
-# -------------------------------------------------------------------
+# Main Job Scrapping Function
 
 def job_scraping(job_info_dict):
     try:
@@ -179,22 +158,3 @@ def job_scraping(job_info_dict):
     except Exception as e:
         logger.error(f"❌ ERROR: {str(e)}", exc_info=True)
         raise
-
-# -------------------------------------------------------------------
-# Entry Point
-# -------------------------------------------------------------------
-
-if __name__ == "__main__":
-    try:
-        l = []
-        jobs = job_scraping({"title":"Software Engineer","location":"India","limit":1,"datePosted":"r604800","experienceLevel":["3"]})
-        for job in jobs:
-            l.append(Job(**job))
-        print("\n" + "=" * 80)
-        print(f"✅ TEST COMPLETED: {len(jobs)} jobs scraped successfully")
-        print("=" * 80)
-        print("Pydantic Object: ", l)
-    except Exception as e:
-        print("\n" + "=" * 80)
-        print(f"❌ TEST FAILED: {str(e)}")
-        print("=" * 80)

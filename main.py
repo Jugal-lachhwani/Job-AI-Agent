@@ -3,16 +3,24 @@ Main execution script for Job Search Agent.
 """
 
 import logging
+from pathlib import Path
 from src.graph import Workflow
 from src.state import GraphState
 
-# Configure logging
+# Create logs directory if it doesn't exist
+Path("logs").mkdir(exist_ok=True)
+
+# Configure logging with both console and file handlers
 logging.basicConfig(
     level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.StreamHandler(),  # Console output
+        logging.FileHandler('logs/app.log', encoding='utf-8')  # File output
+    ]
 )
-logger = logging.getLogger(__name__)
 
+logger = logging.getLogger(__name__)
 
 def main():
     """
