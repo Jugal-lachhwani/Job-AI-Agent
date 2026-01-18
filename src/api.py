@@ -16,9 +16,9 @@ from pathlib import Path
 from sqlmodel import Session
 
 from src.graph import Workflow
-from src.database import init_db, engine
+from src.Database.database import init_db, engine
 from src.models import JobListing, JobAnalysis, SearchHistory
-from src.db_operations import (
+from src.Database.db_operations import (
     save_workflow_results,
     get_all_jobs,
     get_job_with_analysis,

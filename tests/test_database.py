@@ -3,7 +3,7 @@ Quick test to verify database integration works.
 """
 
 from sqlmodel import Session
-from src.database import init_db, engine
+from src.Database.database import init_db, engine
 from src.models import JobListing, JobAnalysis, SearchHistory
 from datetime import datetime
 
