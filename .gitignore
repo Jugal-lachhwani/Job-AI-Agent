@@ -41,5 +41,6 @@ trial/
 **test.py
 
 run_api.py
-test_api.py
 scrape_linkedin_job.py
+
+**.db
