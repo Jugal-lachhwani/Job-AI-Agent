@@ -6,6 +6,9 @@ Workflow_pdf/
 notebooks/
 **.pdf
 **.txt
+**.md
+**.json
+
 
 # Logging
 logs/
