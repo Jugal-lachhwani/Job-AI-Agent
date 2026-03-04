@@ -53,6 +53,7 @@ class Workflow():
         workflow.add_node("extract_fields_from_resume", nodes.extract_fields_from_resume)
         workflow.add_node("extract_fields_from_job_desc", nodes.extract_fields_from_job_desc)
         workflow.add_node("Feedback_and_similarity", nodes.Feedback_and_similarity)
+        workflow.add_node("write_to_sheets", nodes.write_to_sheets)
         
         logger.debug("Configuring workflow edges")
         # Branch 1: Job Description Path
@@ -67,8 +68,11 @@ class Workflow():
         workflow.add_edge("extract_fields_from_job_desc", "Feedback_and_similarity")
         workflow.add_edge("extract_fields_from_resume", "Feedback_and_similarity")
         
+        # Write all data to Google Sheets after feedback is generated
+        workflow.add_edge("Feedback_and_similarity", "write_to_sheets")
+        
         # End workflow
-        workflow.add_edge("Feedback_and_similarity", END)
+        workflow.add_edge("write_to_sheets", END)
         
         logger.info("Compiling workflow graph")
         self.app = workflow.compile()

@@ -6,7 +6,7 @@ Handles authentication and writing of Job objects to a configured Google Sheet.
 
 import os
 import logging
-from typing import List
+from typing import List, Optional
 
 import gspread
 from google.oauth2.credentials import Credentials
@@ -15,7 +15,7 @@ from google.auth.transport.requests import Request
 import pickle
 from dotenv import load_dotenv
 
-from src.state import Job
+from src.state import Job, Job_Summary, Job_Feedback
 
 load_dotenv()
 
@@ -27,7 +27,7 @@ SCOPES = [
 ]
 
 # Path to store the OAuth token so login is only required once
-TOKEN_PATH = os.path.join(os.path.dirname(__file__), "..", "credentials", "token.pickle")
+TOKEN_PATH = os.path.join(os.path.dirname(__file__), "..", "..", "credentials", "token.pickle")
 
 
 def _get_credentials() -> Credentials:
@@ -92,9 +92,15 @@ def _get_worksheet():
         return None
 
 
-def write_jobs_to_sheet(jobs: List[Job]) -> bool:
+def write_jobs_to_sheet(
+    jobs: List[Job],
+    job_summaries: Optional[List[Job_Summary]] = None,
+    job_feedbacks: Optional[List[Job_Feedback]] = None,
+) -> bool:
     """
     Appends a list of Job objects as new rows in the configured Google Sheet.
+    Optionally includes job description summary, skills, similarity score,
+    and resume feedback as extra columns.
 
     Returns True on success, False on failure.
     """
@@ -108,17 +114,39 @@ def write_jobs_to_sheet(jobs: List[Job]) -> bool:
 
     logger.info("Writing %d jobs to Google Sheet.", len(jobs))
 
+    # Build lookup dicts keyed by job id (stored as str in Job, int in summaries/feedbacks)
+    summary_map: dict = {}
+    if job_summaries:
+        for s in job_summaries:
+            summary_map[str(s.id)] = s
+
+    feedback_map: dict = {}
+    if job_feedbacks:
+        for f in job_feedbacks:
+            feedback_map[str(f.id)] = f
+
     try:
-        header = list(Job.model_fields.keys())
+        base_fields = list(Job.model_fields.keys())
+        extra_fields = ["job_description_summary", "job_skills", "similarity", "feedback"]
+        header = base_fields + extra_fields
 
         # Add header row only if the sheet is empty
         if not ws.get_all_values():
             ws.append_row(header, value_input_option="RAW")
 
-        rows_to_append = [
-            [str(getattr(job, field, "")) for field in header]
-            for job in jobs
-        ]
+        rows_to_append = []
+        for job in jobs:
+            row = [str(getattr(job, field, "")) for field in base_fields]
+
+            s = summary_map.get(str(job.id))
+            row.append(s.job_info if s else "")
+            row.append(", ".join(s.job_skills) if s else "")
+
+            fb = feedback_map.get(str(job.id))
+            row.append(str(fb.similarity) if fb else "")
+            row.append(fb.feedback if fb else "")
+
+            rows_to_append.append(row)
 
         ws.append_rows(rows_to_append, value_input_option="USER_ENTERED")
         logger.info("Successfully wrote %d jobs to Google Sheet.", len(jobs))
