@@ -9,6 +9,7 @@ import logging
 from src.agents import Agents
 from src.state import *
 from src.tools.scraping_tools import *
+from src.tools.google_sheets_writer import write_jobs_to_sheet
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -79,8 +80,12 @@ class Nodes:
             l = []
             for job in jobs_data:
                 l.append(Job(**job))
-            
-            
+
+            # Persist scraped jobs to Google Sheets
+            if l:
+                logger.info("Writing scraped jobs to Google Sheets")
+                write_jobs_to_sheet(l)
+
             logger.info(f"Successfully scraped {len(l)} jobs")
             return {'jobs': l}
             

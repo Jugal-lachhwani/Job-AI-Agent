@@ -52,16 +52,6 @@ class Agents:
         # Initialize LLM
         logger.debug("Loading meta/llama-3.1-70b-instruct model")
         llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash-lite")
-    #     llm = ChatNVIDIA(
-    # model="meta/llama-3.1-70b-instruct",  # choose any NVIDIA-supported model
-# )
-        # Initialize embeddings
-        #logger.debug("Loading HuggingFace embeddings model")
-        # embeddings = HuggingFaceEmbeddings(
-        #     model_name="sentence-transformers/all-MiniLM-L6-v2",
-        #     model_kwargs={"device": "cpu"},
-        #     encode_kwargs={"normalize_embeddings": True}
-        # )
         
         # Job Search Input Agent
         logger.debug("Setting up job searching agent")
